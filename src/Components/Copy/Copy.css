@@ -1,0 +1,8 @@
+.copy-img {
+  height: 100%;
+  cursor: pointer;
+  opacity: 0.4;
+}
+.copy-img:hover {
+  opacity: 1;
+}

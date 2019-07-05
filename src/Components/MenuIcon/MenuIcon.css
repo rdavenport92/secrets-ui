@@ -1,0 +1,10 @@
+.menu-icon {
+  filter: invert(1);
+  height: 100%;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.menu-icon:hover {
+  opacity: 1;
+}

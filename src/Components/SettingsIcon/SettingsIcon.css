@@ -1,0 +1,12 @@
+.settings-icon {
+  filter: invert(1);
+  opacity: 0.8;
+  height: 100%;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.settings-icon:hover {
+  transform: rotate(90deg);
+  opacity: 1;
+}

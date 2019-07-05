@@ -1,0 +1,8 @@
+.edit-img {
+  height: 100%;
+  cursor: pointer;
+  opacity: 0.4;
+}
+.edit-img:hover {
+  opacity: 1;
+}

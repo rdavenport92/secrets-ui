@@ -1,0 +1,31 @@
+.body-menu-container {
+  flex-direction: column;
+  width: 240px;
+  border-right: 1px solid rgb(94, 94, 94);
+  margin-left: 0px;
+  position: absolute;
+  z-index: 1;
+  transition: transform 0.1s;
+  overflow-y: scroll;
+}
+
+.body-menu-addbtn-container {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  width: 100%;
+  border-bottom: 1px solid rgb(94, 94, 94);
+}
+
+.body-menu-bottom-container {
+  padding: 15px;
+}
+
+.secret-container {
+  text-align: center;
+}
+.secret-container:hover {
+  color: white;
+  transform: scale(1.1);
+  cursor: pointer;
+}
