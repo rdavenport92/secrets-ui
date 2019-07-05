@@ -22,10 +22,20 @@
 }
 
 .secret-container {
-  text-align: center;
+  font-size: 1.1em;
+  display: flex;
+}
+.secret-container-label:hover {
+  color: rgb(80, 187, 89);
+}
+.secret-container-copy {
+  transform: translateY(-2px);
+  height: 15px;
+  filter: invert(1);
+  padding-left: 4px;
 }
 .secret-container:hover {
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.02);
   cursor: pointer;
 }

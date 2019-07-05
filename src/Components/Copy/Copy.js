@@ -35,7 +35,7 @@ export default class Copy extends Component {
 
   render() {
     return (
-      <CopyToClipboard text={this.props._id} onCopy={this.copy}>
+      <CopyToClipboard text={`"${this.props._id}"`} onCopy={this.copy}>
         <img
           className="copy-img"
           style={this.state.copied ? { opacity: "1" } : null}

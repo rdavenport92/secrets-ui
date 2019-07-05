@@ -1,6 +1,7 @@
 import React from "react";
 import "./NavMenu.css";
 import { Button } from "reactstrap";
+import Copy from "../Copy/Copy";
 
 const NavMenu = ({ secrets, hideMenu, bodyHeight, newSecret, editSecret }) => {
   return (
@@ -19,12 +20,15 @@ const NavMenu = ({ secrets, hideMenu, bodyHeight, newSecret, editSecret }) => {
       </div>
       <div className="body-menu-bottom-container">
         {secrets.map((secret, index) => (
-          <div
-            key={index}
-            className="secret-container"
-            onClick={() => editSecret(secret._id)}
-          >
-            {secret.Name}
+          <div key={index} className="secret-container">
+            <span
+              className="secret-container-label"
+              onClick={() => editSecret(secret._id)}
+            >{`${secret.Name} `}</span>
+            <div className="secret-container-copy">
+              {" "}
+              <Copy _id={secret._id} />
+            </div>
           </div>
         ))}
       </div>

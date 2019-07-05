@@ -15,7 +15,8 @@ const Home = ({ renderSettings, hidingMenu }) => {
           to create a new secret or to edit an existing one
         </div>
         <div className="home-line">
-          Use the search field above to filter secrets by matching values
+          Click the search field above and begin typing to display and filter
+          secrets
         </div>
         <div className="home-line">
           Click{" "}

@@ -1,10 +1,10 @@
 import React, { Component } from "react";
+import io from "socket.io-client";
 import SecretsSearch from "./Components/SecretsSearch/SecretsSearch";
 import Home from "./Components/Home/Home";
 import SettingsIcon from "./Components/SettingsIcon/SettingsIcon";
 import MenuIcon from "./Components/MenuIcon/MenuIcon";
 import EditSecret from "./Components/EditSecret/EditSecret";
-import NewSecret from "./Components/NewSecret/NewSecret";
 import FilterSecrets from "./Components/FilterSecrets/FilterSecrets";
 import Settings from "./Components/Settings/Settings";
 import NavMenu from "./Components/NavMenu/NavMenu";
@@ -21,17 +21,40 @@ export default class App extends Component {
       bodyHeight: "",
       secretToEdit: {
         _id: "",
+        unalteredName: "",
         Name: "",
         Secret: "",
         Description: ""
       }
     };
-    this.api = "http://localhost:3020/api/";
+    this.path = "http://localhost:3020";
+    this.api = `${this.path}/api/`;
+    this.socket = io(this.path);
     this.routes = ["secrets"];
     this.bodyRef = React.createRef();
   }
 
   componentDidMount = () => {
+    this.socket.on("update secret", newSecret => {
+      let secrets = [...this.state.secrets];
+      for (let oldSecret in secrets) {
+        if (secrets[oldSecret]._id === newSecret._id) {
+          secrets[oldSecret] = newSecret;
+          console.log(secrets);
+          this.setState({
+            secrets
+          });
+          break;
+        }
+      }
+    });
+    this.socket.on("new secret", newSecret => {
+      let secrets = [...this.state.secrets];
+      secrets.push(newSecret);
+      this.setState({
+        secrets
+      });
+    });
     window.addEventListener("resize", this.updateHeight);
     fetch(`${this.api}${this.routes[0]}`).then(res => {
       res.json().then(secrets => {
@@ -75,10 +98,19 @@ export default class App extends Component {
   };
 
   newSecret = () => {
+    let secretToEdit = {
+      _id: null,
+      Name: "",
+      unalteredName: "New Secret",
+      Secret: "",
+      Description: "",
+      New: true
+    };
     this.setState({
       hideMenu: true,
       pageToDisplay: "new",
-      secretSearchValue: ""
+      secretSearchValue: "",
+      secretToEdit
     });
   };
 
@@ -89,8 +121,10 @@ export default class App extends Component {
     let secretToEdit = {
       _id: secret._id,
       Name: secret.Name,
+      unalteredName: secret.Name,
       Secret: secret.Secret,
-      Description: secret.Description
+      Description: secret.Description,
+      New: false
     };
     this.setState({
       hideMenu: true,
@@ -121,6 +155,94 @@ export default class App extends Component {
     this.setState({
       secretToEdit
     });
+  };
+  handleEditedSecretStart = () => {
+    //ensure all fields are filled out
+    let secretToEdit = { ...this.state.secretToEdit };
+    for (let field in secretToEdit) {
+      if (field === "Name" || field === "Secret" || field === "Description") {
+        if (secretToEdit[field] === "") {
+          secretToEdit.error = "Please fill out all fields before proceeding!";
+          this.setState({
+            secretToEdit
+          });
+          return;
+        }
+      }
+    }
+    //passed initial error checking
+    //handle post and potentially errors from server
+    if (secretToEdit.New) {
+      this.handleNewSecret(secretToEdit);
+    } else {
+      this.handleEditSecret(secretToEdit);
+    }
+  };
+
+  handleNewSecret = secretToEdit => {
+    fetch(`${this.api}${this.routes[0]}`, {
+      method: "POST",
+
+      body: JSON.stringify({
+        Name: secretToEdit.Name,
+        Secret: secretToEdit.Secret,
+        Description: secretToEdit.Description
+      }),
+      headers: { "Content-Type": "application/json" }
+    }).then(res =>
+      res.json().then(json => {
+        if (!json._id) {
+          secretToEdit.error = `Unable to create secret due to: ${json.name}`;
+          secretToEdit.success = "";
+          this.setState({
+            secretToEdit
+          });
+        } else {
+          secretToEdit.success = `Successfully created! The secret id is: ${
+            json._id
+          }`;
+          secretToEdit.error = "";
+          secretToEdit.Name = "";
+          secretToEdit.Secret = "";
+          secretToEdit.Description = "";
+          this.setState({
+            secretToEdit
+          });
+        }
+      })
+    );
+  };
+
+  handleEditSecret = secretToEdit => {
+    //need to check if changes were even made first
+    let { Name, Secret, Description } = secretToEdit;
+    fetch(`${this.api}${this.routes[0]}/${secretToEdit._id}`, {
+      method: "PUT",
+      body: JSON.stringify({
+        Name,
+        Secret,
+        Description
+      }),
+      headers: { "Content-Type": "application/json" }
+    }).then(res =>
+      res.json().then(json => {
+        if (!json._id) {
+          secretToEdit.error = `Unable to update secret due to: ${json.name}`;
+          secretToEdit.success = "";
+          this.setState({
+            secretToEdit
+          });
+        } else {
+          secretToEdit.success = `Successfully updated! The secret id is: ${
+            json._id
+          }`;
+          secretToEdit.error = "";
+          this.setState({
+            secretToEdit
+          });
+        }
+      })
+    );
   };
 
   render() {
@@ -169,13 +291,14 @@ export default class App extends Component {
                 renderSettings={this.renderSettings}
                 hidingMenu={this.hidingMenu}
               />
-            ) : this.state.pageToDisplay === "edit" ? (
+            ) : this.state.pageToDisplay === "edit" ||
+              this.state.pageToDisplay === "new" ? (
               <EditSecret
+                secrets={this.state.secrets}
                 secretToEdit={this.state.secretToEdit}
                 updateSecret={this.updateSecret}
+                handleEditedSecretStart={this.handleEditedSecretStart}
               />
-            ) : this.state.pageToDisplay === "new" ? (
-              <NewSecret />
             ) : this.state.pageToDisplay === "filter" ? (
               <FilterSecrets
                 secrets={this.state.secrets}

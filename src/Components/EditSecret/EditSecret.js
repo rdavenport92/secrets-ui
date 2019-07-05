@@ -14,6 +14,21 @@ export default class EditSecret extends Component {
     return (
       <div className="edit-secret-container">
         <table className="edit-secret-table">
+          <thead>
+            <tr>
+              <th colSpan={2}>
+                <div className="secret-form-header">
+                  <h4>
+                    {this.props.secretToEdit._id
+                      ? this.props.secrets.filter(
+                          secret => secret._id === this.props.secretToEdit._id
+                        )[0].Name
+                      : "New Secret"}
+                  </h4>
+                </div>
+              </th>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <td>
@@ -72,7 +87,26 @@ export default class EditSecret extends Component {
             <tr>
               <td colSpan={2}>
                 <div className="secret-button-container">
-                  <Button className="btn-success">Save Changes</Button>
+                  <Button
+                    className="btn-success"
+                    onClick={this.props.handleEditedSecretStart}
+                  >
+                    {this.props.secretToEdit.New
+                      ? "Create New"
+                      : "Save Changes"}
+                  </Button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td colSpan={2}>
+                <div className="secret-message-display">
+                  <div className="secret-message-error">
+                    {this.props.secretToEdit.error}
+                  </div>
+                  <div className="secret-message-success">
+                    {this.props.secretToEdit.success}
+                  </div>
                 </div>
               </td>
             </tr>
