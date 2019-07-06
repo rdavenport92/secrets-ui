@@ -1,0 +1,10 @@
+.logout-icon {
+  filter: invert(1);
+  opacity: 0.8;
+  height: 100%;
+  cursor: pointer;
+}
+
+.logout-icon:hover {
+  opacity: 1;
+}

@@ -1,0 +1,24 @@
+.edit-user-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.edit-user-group {
+  max-width: 400px;
+}
+.edit-user-label-input {
+  padding: 5px;
+}
+.edit-user-button-container {
+  padding-top: 15px;
+}
+.edit-user-error-success-container {
+  padding-top: 5px;
+}
+.edit-user-error {
+  color: rgb(148, 49, 49);
+}
+
+.edit-user-success {
+  color: rgb(80, 187, 89);
+}

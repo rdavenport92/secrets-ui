@@ -9,6 +9,7 @@ import FilterSecrets from "./Components/FilterSecrets/FilterSecrets";
 import Settings from "./Components/Settings/Settings";
 import NavMenu from "./Components/NavMenu/NavMenu";
 import "./App.css";
+import LogOut from "./Components/LogOut/LogOut";
 
 export default class App extends Component {
   constructor(props) {
@@ -25,12 +26,17 @@ export default class App extends Component {
         Name: "",
         Secret: "",
         Description: ""
+      },
+      user: {
+        Firstname: "",
+        Lastname: "",
+        Username: "",
+        Email: "",
+        Password: "",
+        Confirm: ""
       }
     };
-    this.path = "http://localhost:3020";
-    this.api = `${this.path}/api/`;
-    this.socket = io(this.path);
-    this.routes = ["secrets"];
+    this.socket = io(this.props.path);
     this.bodyRef = React.createRef();
   }
 
@@ -40,7 +46,6 @@ export default class App extends Component {
       for (let oldSecret in secrets) {
         if (secrets[oldSecret]._id === newSecret._id) {
           secrets[oldSecret] = newSecret;
-          console.log(secrets);
           this.setState({
             secrets
           });
@@ -56,12 +61,19 @@ export default class App extends Component {
       });
     });
     window.addEventListener("resize", this.updateHeight);
-    fetch(`${this.api}${this.routes[0]}`).then(res => {
+    fetch(`${this.props.api}${this.props.routes[0]}`, {
+      method: "GET",
+      headers: new Headers({
+        Authorization: localStorage.getItem("token")
+      })
+    }).then(res => {
       res.json().then(secrets => {
-        this.setState({
-          secrets,
-          bodyHeight: `${this.bodyRef.current.clientHeight}px`
-        });
+        if (!secrets.name) {
+          this.setState({
+            secrets,
+            bodyHeight: `${this.bodyRef.current.clientHeight}px`
+          });
+        }
       });
     });
   };
@@ -180,15 +192,17 @@ export default class App extends Component {
   };
 
   handleNewSecret = secretToEdit => {
-    fetch(`${this.api}${this.routes[0]}`, {
+    fetch(`${this.props.api}${this.props.routes[0]}`, {
       method: "POST",
-
       body: JSON.stringify({
         Name: secretToEdit.Name,
         Secret: secretToEdit.Secret,
         Description: secretToEdit.Description
       }),
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
     }).then(res =>
       res.json().then(json => {
         if (!json._id) {
@@ -216,33 +230,53 @@ export default class App extends Component {
   handleEditSecret = secretToEdit => {
     //need to check if changes were even made first
     let { Name, Secret, Description } = secretToEdit;
-    fetch(`${this.api}${this.routes[0]}/${secretToEdit._id}`, {
+    fetch(`${this.props.api}${this.props.routes[0]}/${secretToEdit._id}`, {
       method: "PUT",
       body: JSON.stringify({
         Name,
         Secret,
         Description
       }),
-      headers: { "Content-Type": "application/json" }
-    }).then(res =>
-      res.json().then(json => {
-        if (!json._id) {
-          secretToEdit.error = `Unable to update secret due to: ${json.name}`;
-          secretToEdit.success = "";
-          this.setState({
-            secretToEdit
-          });
-        } else {
-          secretToEdit.success = `Successfully updated! The secret id is: ${
-            json._id
-          }`;
-          secretToEdit.error = "";
-          this.setState({
-            secretToEdit
-          });
-        }
-      })
-    );
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")
+      }
+    })
+      .then(res =>
+        res.json().then(json => {
+          if (!json._id) {
+            secretToEdit.error = `Unable to update secret due to: ${json.name}`;
+            secretToEdit.success = "";
+            this.setState({
+              secretToEdit
+            });
+          } else {
+            secretToEdit.success = `Successfully updated! The secret id is: ${
+              json._id
+            }`;
+            secretToEdit.error = "";
+            this.setState({
+              secretToEdit
+            });
+          }
+        })
+      )
+      .catch(err => {
+        secretToEdit.error = err.name;
+        this.setState({ secretToEdit });
+      });
+  };
+
+  updateUserState = (e, key) => {
+    let user = { ...this.state.user };
+    user[key] = e.target.value;
+    this.setState({
+      user
+    });
+  };
+
+  addUser = () => {
+    console.log(this.state.user);
   };
 
   render() {
@@ -271,8 +305,15 @@ export default class App extends Component {
               />
             </div>
             <div className="header-settings-container">
-              <div className="header-settings-sizable">
-                <SettingsIcon renderSettings={this.renderSettings} />
+              <div className="header-account-settings">
+                <div className="header-settings-sizable">
+                  <SettingsIcon renderSettings={this.renderSettings} />
+                </div>
+              </div>
+              <div className="header-account-logout">
+                <div className="header-logout-sizable">
+                  <LogOut logOut={this.props.logOut} />
+                </div>
               </div>
             </div>
           </div>
@@ -306,7 +347,7 @@ export default class App extends Component {
                 editSecret={this.editSecret}
               />
             ) : (
-              <Settings />
+              <Settings api={this.props.api} routes={this.props.routes} />
             )}
           </div>
         </div>

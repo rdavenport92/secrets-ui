@@ -78,6 +78,23 @@
 .header-settings-sizable {
   height: 30px;
 }
+.header-account-settings {
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+  border-right: 1px solid rgb(94, 94, 94);
+  height: 100%;
+}
+
+.header-account-logout {
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  height: 100%;
+}
+
+.header-logout-sizable {
+}
 
 .body-container {
   display: flex;

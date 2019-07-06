@@ -1,0 +1,25 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.login-table {
+  transform: translateY(-30%);
+}
+
+.login-header {
+  text-align: center;
+  padding-bottom: 5px;
+}
+.login-button {
+  display: flex;
+  padding-top: 5px;
+  justify-content: center;
+}
+.login-errors {
+  min-height: 40px;
+  padding-top: 10px;
+  color: rgb(148, 49, 49);
+  text-align: center;
+}

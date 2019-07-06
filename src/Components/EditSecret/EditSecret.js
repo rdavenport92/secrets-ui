@@ -59,6 +59,7 @@ export default class EditSecret extends Component {
                     placeholder="Enter the secret"
                   />
                   <img
+                    alt="show/hide"
                     style={!this.state.hidePassword ? { opacity: ".2" } : null}
                     onClick={() =>
                       this.setState({ hidePassword: !this.state.hidePassword })

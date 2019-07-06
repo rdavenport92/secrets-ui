@@ -5,6 +5,7 @@ import settingsIcon from "../../assets/settings.png";
 const SettingsIcon = ({ renderSettings }) => {
   return (
     <img
+      alt="settingsIcon"
       className="settings-icon"
       src={settingsIcon}
       onClick={renderSettings}

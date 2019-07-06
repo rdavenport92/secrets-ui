@@ -1,0 +1,25 @@
+.settings-main-container {
+  flex-direction: column;
+}
+.settings-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 15px;
+}
+.settings-header-wrapper {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+.settings-tab {
+  opacity: 0.4;
+  padding: 5px;
+}
+
+.settings-tab:hover {
+  cursor: pointer;
+}
+.active {
+  opacity: 0.9;
+}

@@ -4,9 +4,14 @@ import SettingsIcon from "../SettingsIcon/SettingsIcon";
 import "./Home.css";
 
 const Home = ({ renderSettings, hidingMenu }) => {
+  let user = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="home-main-container">
       <div className="home-intro-container">
+        <div className="home-header">
+          <h2>{`Welcome, ${user.Firstname}!`}</h2>
+        </div>
+        <hr />
         <div className="home-line">
           Click{" "}
           <div className="home-icons">
@@ -23,7 +28,7 @@ const Home = ({ renderSettings, hidingMenu }) => {
           <div className="home-icons">
             <SettingsIcon renderSettings={renderSettings} />
           </div>{" "}
-          to edit your account
+          to create a new user or to edit your account
         </div>
       </div>
     </div>

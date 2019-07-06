@@ -19,20 +19,32 @@
 
 .body-menu-bottom-container {
   padding: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 .secret-container {
-  font-size: 1.1em;
   display: flex;
+  flex-direction: row;
+  font-size: 1.1em;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+.secret-container-label-icon {
+  display: flex;
+  border-right: 1px solid rgba(94, 94, 94, 0.432);
+  border-bottom: 1px solid rgba(94, 94, 94, 0.432);
+  border-radius: 5px;
+  padding-right: 7px;
 }
 .secret-container-label:hover {
   color: rgb(80, 187, 89);
 }
 .secret-container-copy {
   transform: translateY(-2px);
-  height: 15px;
+  height: 18px;
   filter: invert(1);
-  padding-left: 4px;
+  padding-left: 7px;
 }
 .secret-container:hover {
   color: white;

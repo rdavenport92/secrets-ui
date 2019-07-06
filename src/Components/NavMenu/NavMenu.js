@@ -21,13 +21,15 @@ const NavMenu = ({ secrets, hideMenu, bodyHeight, newSecret, editSecret }) => {
       <div className="body-menu-bottom-container">
         {secrets.map((secret, index) => (
           <div key={index} className="secret-container">
-            <span
-              className="secret-container-label"
-              onClick={() => editSecret(secret._id)}
-            >{`${secret.Name} `}</span>
-            <div className="secret-container-copy">
-              {" "}
-              <Copy _id={secret._id} />
+            <div className="secret-container-label-icon">
+              <span
+                className="secret-container-label"
+                onClick={() => editSecret(secret._id)}
+              >{`${secret.Name} `}</span>
+              <div className="secret-container-copy">
+                {" "}
+                <Copy _id={secret._id} />
+              </div>
             </div>
           </div>
         ))}

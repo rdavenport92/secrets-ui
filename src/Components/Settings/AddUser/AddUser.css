@@ -1,0 +1,30 @@
+.add-user-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.add-user-group {
+  display: flex;
+  flex-direction: column;
+}
+.add-user-row {
+  display: flex;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.add-user-label-input {
+  padding: 5px;
+}
+.add-user-button-container {
+  padding-top: 15px;
+}
+.add-user-error-success-container {
+  padding-top: 5px;
+}
+.add-user-error {
+  color: rgb(148, 49, 49);
+}
+
+.add-user-success {
+  color: rgb(80, 187, 89);
+}
