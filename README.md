@@ -1,1 +1,1 @@
-npm install after cloning repo to local machine in order to install dependencies
+ui that allows users to create secret phrases and store in a database protected behind a username/password combination - the phrases then return a mongoid. In any script that a user is writing and needs to reference a secret phrase, he/she can make an api call, providing his/her username, password and the mongoid to retrieve the secret phrase.
